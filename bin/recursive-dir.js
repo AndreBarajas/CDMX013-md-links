@@ -1,22 +1,40 @@
-
+const color = require('colors'); 
 const fs = require('fs');
 const path = require('path');
 
-function test(folderPaths) {
-    
-       folderPaths.forEach(folderPath => {
-        const results = fs.readdirSync(folderPath)
-        const folders = results.filter(res => fs.lstatSync(path.resolve(folderPath, res)).isDirectory())
-        const innerFolderPaths = folders.map(folder => path.resolve(folderPath, folder))
-          if (folderPaths.length === 0) {
-              return
-           }
-        console.log(innerFolderPaths);
-        test(innerFolderPaths)
-    })
 
-}   
+// Check if path is absolute or relative & convert relative path into absolute
+function checkRoute(userPath) {
+    console.log(userPath);
+    console.log(path.isAbsolute(userPath));
+    if (userPath === undefined) {
+        console.log('Ingresa una ruta válida'.red)
+    } else if (path.isAbsolute(userPath) === true) {
+        console.log('Es una ruta absoluta');
+        getFileMd(userPath);
+    } else {
+        getFileMd(path.resolve(__dirname, userPath));
+        console.log('Es una ruta relativa'.green, path.resolve(__dirname, userPath));
+    }
+}; 
+const resultRoute = checkRoute('C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin');
+console.log('resultado ruta abs', resultRoute);
 
-test([path.resolve(__dirname, 'examples'),]);
+// // Return array with files
+function getFileMd(absolutePath) {
+    console.log('path usuario',path)
+    if (fs.lstatSync(absolutePath).isFile()) {
+            console.log('ruta de un file', absolutePath)
+            return [absolutePath]      
+    } else {
+        const results = fs.readdirSync(absolutePath);
+        const innerFolders = results.map(result => getFileMd(absolutePath + '\\' + result));
+        const oneArray = innerFolders.flat(Infinity);
+        console.log("flat array", oneArray);
+        return oneArray;
+    }  
+}
+const resultLoop = getFileMd('C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin'); 
+console.log('variable resultLoop', resultLoop);
 
-// console.log(path.resolve('bin'));
+
