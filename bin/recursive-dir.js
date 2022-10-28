@@ -79,9 +79,7 @@ const getStatus = (arr) => {
                 status: content.status + content.statusText,
             });
             console.log("statusLinks", statusLinks);
-            resolve({
-                statusLinks
-            })
+            resolve( statusLinks )
         }).catch(() =>  {
             statusLinks.push({
                 href: arr.href,
@@ -90,9 +88,7 @@ const getStatus = (arr) => {
                 status: '404',
             });
             console.log(statusLinks);
-                resolve({
-                   statusLinks
-                })
+                resolve( statusLinks )
             })
     })
 };
@@ -103,10 +99,17 @@ Promise.all([getStatus({
     href: 'https://nodejs.org/',
     text: 'Node.js',
     file: 'C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin\\examples\\readmeeee.md'
-})])
-    .then(response => console.log("promise all", response)
+},
+    {
+    href: 'https://nodejs.org/',
+    text: 'Node.js',
+    file: 'C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin\\examples\\readmeeee.md'
+}
+)])
+    .then(response => console.log("promise all", response.forEach.flat())
     );
 
+// 
     
 
 
