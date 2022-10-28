@@ -35,7 +35,6 @@ function getFilesMd(absolutePath) {
         const results = fs.readdirSync(absolutePath);
         const innerFolders = results.map(result => getFilesMd(absolutePath + '\\' + result));
         const oneArray = innerFolders.flat(Infinity);
-        // console.log("flat array", oneArray);
         return oneArray;
     }
 }
@@ -63,7 +62,7 @@ function readFile(pathsFiles) {
  };
 
 const resultReadFile = readFile (resultMds);
-// console.log("resultado de leer los archivos", resultReadFile);
+console.log("resultado de leer los archivos", resultReadFile);
 
 // Validate links
 const getStatus = (arr) => {
@@ -95,26 +94,10 @@ const getStatus = (arr) => {
     
 
 // Promise All
-Promise.all([getStatus({
-    href: 'https://nodejs.org/',
-    text: 'Node.js',
-    file: 'C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin\\examples\\readmeeee.md'
-},
-    {
-    href: 'https://nodejs.org/',
-    text: 'Node.js',
-    file: 'C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin\\examples\\readmeeee.md'
-}
-)])
-    .then(response => console.log("promise all", response.forEach.flat())
-    );
+const promises = (obj) => {
+    Promise.all( 
+        obj.map(obj => getStatus(obj))
+  ).then( response => console.log("promesas", response))  
+};
 
-// 
-    
-
-
-
-
-
-
-
+promises(resultReadFile);
