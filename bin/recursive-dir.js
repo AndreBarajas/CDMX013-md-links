@@ -5,19 +5,19 @@ const path = require('path');
 
 
 // Check if path is absolute or relative & convert relative path into absolute
-// function checkRoute(userPath) {
-//     console.log(userPath);
-//     console.log(path.isAbsolute(userPath));
-//     if (userPath === undefined) {
-//         console.log('Ingresa una ruta válida'.red)
-//     } else if (path.isAbsolute(userPath) === true) {
-//         console.log('Es una ruta absoluta');
-//         getFileMd(userPath);
-//     } else {
-//         getFileMd(path.resolve(__dirname, userPath));
-//         console.log('Es una ruta relativa'.green, path.resolve(__dirname, userPath));
-//     }
-// };
+function checkRoute(userPath) {
+    console.log(userPath);
+    console.log(path.isAbsolute(userPath));
+    if (userPath === undefined) {
+        console.log('Ingresa una ruta válida'.red)
+    } else if (path.isAbsolute(userPath) === true) {
+        console.log('Es una ruta absoluta');
+        getFileMd(userPath);
+    } else {
+        getFileMd(path.resolve(__dirname, userPath));
+        console.log('Es una ruta relativa'.green, path.resolve(__dirname, userPath));
+    }
+};
 // const resultRoute = checkRoute('C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin');
 // console.log('resultado ruta abs', resultRoute);
 
@@ -62,7 +62,7 @@ function readFile(pathsFiles) {
  };
 
 const resultReadFile = readFile (resultMds);
-console.log("resultado de leer los archivos", resultReadFile);
+// console.log("resultado de leer los archivos", resultReadFile);
 
 // Validate links
 const getStatus = (arr) => {
@@ -77,7 +77,7 @@ const getStatus = (arr) => {
                 file: arr.file,
                 status: content.status + content.statusText,
             });
-            console.log("statusLinks", statusLinks);
+            // console.log("statusLinks", statusLinks);
             resolve( statusLinks )
         }).catch(() =>  {
             statusLinks.push({
@@ -86,7 +86,7 @@ const getStatus = (arr) => {
                 file: arr.file,
                 status: '404',
             });
-            console.log(statusLinks);
+            // console.log(statusLinks);
                 resolve( statusLinks )
             })
     })
@@ -95,9 +95,32 @@ const getStatus = (arr) => {
 
 // Promise All
 const promises = (obj) => {
-    Promise.all( 
-        obj.map(obj => getStatus(obj))
-  ).then( response => console.log("promesas", response))  
+    return new Promise((resolve, reject) => {
+        Promise.all(
+            obj.map(obj => getStatus(obj))
+        ).then(response => {
+            resolve(response);
+            console.log("promise all", response);
+        })
+    })
 };
 
-promises(resultReadFile);
+//  const resultPromises = promises(resultReadFile).then(response => response);
+promises(resultReadFile).then(response => console.log("response", response.flat()));
+
+// console.log("result", resultPromises);
+
+//Statistics
+// promises.map( prom => {
+//     let statistics = 0;
+//     if (prom.status === '200') {
+//         statistics ++;
+//         console.log("stats", statistics);
+//     }
+// })
+
+
+// Export 
+module.exports = {
+    checkRoute
+}
