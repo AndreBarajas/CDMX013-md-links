@@ -104,12 +104,14 @@ const promises = (obj) => {
     })
 };
 const resultPromises = promises(resultReadFile).then(response => { return response.flat() });
-resultPromises.then(console.log);
+// resultPromises.then(console.log);
 
+const statisticsPromise = resultPromises.then(arrObj => getStatistics(arrObj))
+statisticsPromise.then(console.log)
 
 //Statistics
 const getStatistics = (arrObj) => {
-    let statistics = [0];
+    let statistics = 0;
     arrObj.forEach(res => {
             if (res.status === '200OK') {
             statistics++;
@@ -118,8 +120,6 @@ const getStatistics = (arrObj) => {
     })
     return statistics;
 };
-const resultStatistics = resultPromises.then(arr => console.log("stats", getStatistics(arr)));
-resultStatistics.then(console.log);
 
 // Export 
 module.exports = checkRoute;
