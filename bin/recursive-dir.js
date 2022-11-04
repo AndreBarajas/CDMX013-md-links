@@ -3,7 +3,6 @@ const color = require('colors');
 const fs = require('fs');
 const path = require('path');
 
-
 // Check if path is absolute or relative & convert relative path into absolute
 function checkRoute(userPath) {
     console.log(userPath);
@@ -100,27 +99,27 @@ const promises = (obj) => {
             obj.map(obj => getStatus(obj))
         ).then(response => {
             resolve(response);
-            console.log("promise all", response);
+            // console.log("promise all", response);
         })
     })
 };
+const resultPromises = promises(resultReadFile).then(response => { return response.flat() });
+resultPromises.then(console.log);
 
-//  const resultPromises = promises(resultReadFile).then(response => response);
-promises(resultReadFile).then(response => console.log("response", response.flat()));
-
-// console.log("result", resultPromises);
 
 //Statistics
-// promises.map( prom => {
-//     let statistics = 0;
-//     if (prom.status === '200') {
-//         statistics ++;
-//         console.log("stats", statistics);
-//     }
-// })
-
+const getStatistics = (arrObj) => {
+    let statistics = [0];
+    arrObj.forEach(res => {
+            if (res.status === '200OK') {
+            statistics++;
+            console.log("stats", statistics);
+        }
+    })
+    return statistics;
+};
+const resultStatistics = resultPromises.then(arr => console.log("stats", getStatistics(arr)));
+resultStatistics.then(console.log);
 
 // Export 
-module.exports = {
-    checkRoute
-}
+module.exports = checkRoute;
