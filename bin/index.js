@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 const path = require('path');
 const { program } = require('commander');
-const checkRoute = require ('./recursive-dir')
-
+const fn = require ('./recursive-dir');
 
 program
     .name('Mdlinks')
@@ -15,16 +14,29 @@ program
     .option('--validate', 'Verify if the links are active or not with axios')
     .option('--stats', 'Few statistics of .md links')
     .command('--validate --stats', 'Get statistics and validation of links')
-    .action((path, options) => {
-
-        if (options.validate) {
-            new Promise((resolve) => {
-            resolve(checkRoute(path))
+    .action((userPath, option) => {
+            return new Promise((resolve, reject) => {
+                if (option.validate) {
+                    const fnCheck = fn.checkRoute(userPath)
+                    console.log("funcion checkRoute", fnCheck);
+                        // .then((path) => fn.checkRoute(path))
+                        // .then((data) => resolve(data))
+                        // .cath((error) => reject(error))
+                } else if (option.stats) {
+                    fn.checkRoute((userPath))
+                        .then((path) => fn.getStatistics(path))
+                        .then((data) => resolve(data))
+                        .catch((error) => reject(error))
+                } else if (option.validate && option.stats) {
+                    fn.checkRoute((userPath))
+                        .then((path) => fn.checkRoute(path))
+                        .then((data) => resolve(fn.getStatistics(data, stats)))
+                        .catch((error) => reject(error))
+                } else {
+                    reject('¡Ups!, huno un error, intentalo nuevamente.')
+                }
             })
-            console.log('validate')
-        } else if (options.stats) {
-            console.log('stats')
-        }
-    });
+        })    
 
 program.parse(process.argv);
+

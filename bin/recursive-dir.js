@@ -5,16 +5,18 @@ const path = require('path');
 
 // Check if path is absolute or relative & convert relative path into absolute
 function checkRoute(userPath) {
-    console.log(userPath);
-    console.log(path.isAbsolute(userPath));
+    console.log("error", userPath);
+    console.log("msj",path.isAbsolute(userPath));
     if (userPath === undefined) {
         console.log('Ingresa una ruta válida'.red)
+        return false;
     } else if (path.isAbsolute(userPath) === true) {
         console.log('Es una ruta absoluta');
-        getFileMd(userPath);
+        return userPath;
     } else {
-        getFileMd(path.resolve(__dirname, userPath));
         console.log('Es una ruta relativa'.green, path.resolve(__dirname, userPath));
+        return (path.resolve(__dirname, userPath));
+        
     }
 };
 // const resultRoute = checkRoute('C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin');
@@ -104,22 +106,29 @@ const promises = (obj) => {
     })
 };
 const resultPromises = promises(resultReadFile).then(response => { return response.flat() });
-// resultPromises.then(console.log);
-
-const statisticsPromise = resultPromises.then(arrObj => getStatistics(arrObj))
-statisticsPromise.then(console.log)
 
 //Statistics
 const getStatistics = (arrObj) => {
-    let statistics = 0;
+    let statistics = {
+        Total: 0,
+        Unique: 0,
+        Broken: 0,
+    }
     arrObj.forEach(res => {
-            if (res.status === '200OK') {
-            statistics++;
-            console.log("stats", statistics);
+            if (res.status === '404') {
+            statistics.Broken++
+            console.log("stats", statistics.Total);
         }
     })
     return statistics;
 };
+const statisticsPromise = resultPromises.then(arrObj => getStatistics(arrObj))
+statisticsPromise.then(console.log)
 
 // Export 
-module.exports = checkRoute;
+module.exports = {
+    checkRoute,
+    getFilesMd,
+    getStatistics,
+}
+    
