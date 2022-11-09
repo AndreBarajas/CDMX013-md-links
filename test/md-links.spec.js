@@ -1,10 +1,11 @@
 const mdLinks = require('../');
 
 
-describe('mdLinks', () => {
+describe('mdLinks function', () => {
 
-  it('should...', () => {
-    console.log('FIX ME!');
+  test('mdLinks should be a function', () => {
+    expect( typeof mdlinks).toBe('function')
   });
 
 });
+

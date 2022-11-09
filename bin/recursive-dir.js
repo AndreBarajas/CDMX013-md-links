@@ -6,7 +6,6 @@ const path = require('path');
 // Check if path is absolute or relative & convert relative path into absolute
 function checkRoute(userPath) {
     console.log("error", userPath);
-    console.log("msj",path.isAbsolute(userPath));
     if (userPath === undefined) {
         console.log('Ingresa una ruta válida'.red)
         return false;
@@ -39,11 +38,11 @@ function getFilesMd(absolutePath) {
         return oneArray;
     }
 }
-const resultMds = getFilesMd('C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin');
+// const resultMds = getFilesMd('C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin');
 // console.log('variable resultLoop', resultMds);
 
 
-// Read files .md
+// Read directories to extract info of .md files
 function readFile(pathsFiles) {
     let arrayRead = []; 
     pathsFiles.forEach(file => { 
@@ -62,7 +61,7 @@ function readFile(pathsFiles) {
     return arrayRead;
  };
 
-const resultReadFile = readFile (resultMds);
+// const resultReadFile = readFile (resultMds);
 // console.log("resultado de leer los archivos", resultReadFile);
 
 // Validate links
@@ -78,7 +77,6 @@ const getStatus = (arr) => {
                 file: arr.file,
                 status: content.status + content.statusText,
             });
-            // console.log("statusLinks", statusLinks);
             resolve( statusLinks )
         }).catch(() =>  {
             statusLinks.push({
@@ -87,7 +85,6 @@ const getStatus = (arr) => {
                 file: arr.file,
                 status: '404',
             });
-            // console.log(statusLinks);
                 resolve( statusLinks )
             })
     })
@@ -105,7 +102,7 @@ const promises = (obj) => {
         })
     })
 };
-const resultPromises = promises(resultReadFile).then(response => { return response.flat() });
+// const resultPromises = promises(resultReadFile).then(response => { return response.flat() });
 
 //Statistics
 const getStatistics = (arrObj) => {
@@ -118,17 +115,23 @@ const getStatistics = (arrObj) => {
             if (res.status === '404') {
             statistics.Broken++
             console.log("stats", statistics.Total);
-        }
+            } else if (res.status !== null) {
+                statistics.Total++
+            }
     })
     return statistics;
 };
-const statisticsPromise = resultPromises.then(arrObj => getStatistics(arrObj))
-statisticsPromise.then(console.log)
+// const statisticsPromise = resultPromises.then(arrObj => getStatistics(arrObj))
+// statisticsPromise.then(console.log)
 
 // Export 
 module.exports = {
     checkRoute,
     getFilesMd,
     getStatistics,
+    readFile, 
+    getStatus, 
+    promises,
+    getStatistics
 }
     
