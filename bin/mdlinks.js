@@ -11,11 +11,10 @@ const mdLinks = (userPath, options) => {
         }
 
         const arrayMds = fn.getFilesMd(absolutePath);
-        // console.log("array", arrayMds);
-
+       
          if (options == undefined) {
         resolve(fn.readFile(arrayMds));
-        }  else if (options.validate == true && options.stats == false) {
+         } else if (options.validate == true && options.stats == false) {
             const readFiles = fn.readFile(arrayMds);
             fn.promises(readFiles)
                 .then((data) => resolve (data.flat()))
@@ -33,7 +32,6 @@ const mdLinks = (userPath, options) => {
                 .catch((error) => reject(error))                
         } else if (options.stats == false && options.validate == false) {
             resolve(fn.readFile(arrayMds));
-            // console.log(readfiles);
         } 
     })
 }

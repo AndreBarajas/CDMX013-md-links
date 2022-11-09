@@ -3,27 +3,22 @@ const color = require('colors');
 const fs = require('fs');
 const path = require('path');
 
-// Check if path is absolute or relative & convert relative path into absolute
+// Check if path is absolute or relative to return only absolute paths
 function checkRoute(userPath) {
     console.log("error", userPath);
     if (userPath === undefined) {
-        console.log('Ingresa una ruta válida'.red)
         return false;
     } else if (path.isAbsolute(userPath) === true) {
-        console.log('Es una ruta absoluta');
         return userPath;
     } else {
-        console.log('Es una ruta relativa'.green, path.resolve(__dirname, userPath));
         return (path.resolve(__dirname, userPath));
         
     }
 };
-// const resultRoute = checkRoute('C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin');
-// console.log('resultado ruta abs', resultRoute);
 
-// // Return array with only .md files 
+
+// Filter the directories to return array with only .md files 
 function getFilesMd(absolutePath) {
-    console.log('path usuario', path)
     if (fs.lstatSync(absolutePath).isFile()) {
         if (path.extname(absolutePath) === '.md') {
             console.log('ruta de un file', absolutePath);
@@ -38,9 +33,6 @@ function getFilesMd(absolutePath) {
         return oneArray;
     }
 }
-// const resultMds = getFilesMd('C:\\Users\\abaja\\Documents\\Laboratoria\\CDMX013-md-links\\bin');
-// console.log('variable resultLoop', resultMds);
-
 
 // Read directories to extract info of .md files
 function readFile(pathsFiles) {
@@ -61,10 +53,8 @@ function readFile(pathsFiles) {
     return arrayRead;
  };
 
-// const resultReadFile = readFile (resultMds);
-// console.log("resultado de leer los archivos", resultReadFile);
 
-// Validate links
+// Function that validate links to know HTTP status
 const getStatus = (arr) => {
     let statusLinks = [];
     return new Promise((resolve, reject) => {
@@ -91,7 +81,7 @@ const getStatus = (arr) => {
 };
     
 
-// Promise All
+// Promise All 
 const promises = (obj) => {
     return new Promise((resolve, reject) => {
         Promise.all(
@@ -102,9 +92,9 @@ const promises = (obj) => {
         })
     })
 };
-// const resultPromises = promises(resultReadFile).then(response => { return response.flat() });
 
-//Statistics
+
+// Function to know basic statistics
 const getStatistics = (arrObj) => {
     let statistics = {
         Total: 0,
@@ -121,10 +111,8 @@ const getStatistics = (arrObj) => {
     })
     return statistics;
 };
-// const statisticsPromise = resultPromises.then(arrObj => getStatistics(arrObj))
-// statisticsPromise.then(console.log)
 
-// Export 
+// Export functions
 module.exports = {
     checkRoute,
     getFilesMd,
